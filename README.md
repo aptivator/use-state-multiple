@@ -121,7 +121,7 @@ from an existing one.  Strict equality (`===`) is used when performing the compa
 
 ### Resetting Component State
 
-The resetting function may be used to overwrite an entire state at once.  The function's
+The resetting function can be used to overwrite an entire state at once.  The function's
 default parameter is the initial state used with `useStateMultiple()`.  If a different
 data state is needed, then it should be passed to the resetter directly.
 
