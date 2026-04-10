@@ -9,8 +9,10 @@
 * [Usage](#usage)
   * [Invoking the Hook](#invoking-the-hook)
   * [Updating Component State](#updating-component-state)
-    * [Multiple Updates](#multiple-updates)
+    * [Data Address Formats](#data-address-formats)
     * [Single Update](#single-update)
+    * [Multiple Updates](#multiple-updates)
+    * [Updating Process](#updating-process)
   * [Resetting Component State](#resetting-component-state)
   * [Using an Array to Store a State](#using-an-array-to-store-a-state)
 * [Development](#development)
@@ -67,15 +69,39 @@ export function Component() {
 
 ### Updating Component State
 
+#### Data Address Formats
+
+`use-state-multiple` allows a component state to be represented as a multi-level object.  To update a
+deeply nested value requires a dot-delimited (e.g., `user.auth.loggedIn`) or an array
+(e.g., `['user', 'auth', 'loggedIn']`) path.  The latter will work only for a single update.  Updating
+a root value naturally only requires its property name (e.g., `email`).
+
+#### Single Update
+
+For singular updates, the updating function accepts a data address and its new value as two
+parameters.  Instead of a value, a transforming function can be provided that takes an existing
+value, operates on it, and returns a new value.
+
+```javascript
+export function Component() {
+  let [state, patchState] = useStateMultiple();
+  let {user: {loggedIn: false, email: ''} = {}, permissions = []} = state;
+
+  /*
+    ...
+  */
+
+  patchState('user.loggedIn', true);
+}
+```
+
 #### Multiple Updates
 
-The updating function can take an object of data addresses and their new values.  The
-library supports a deeply nested state object and an address can be either a dot-delimited
-path (e.g., `user.loggedIn`), an array (e.g., `['user', 'loggedIn']`), or singular
-(e.g., `loggedIn`).  A function can be specified instead of a value.  The function will
-be given a current state value stored at an address and the function's return will be
-then stored at the address.
+The updating function can take an object of data addresses and their new values.  A function can be
+specified instead of a value.  A function will be given a current state value stored at an address
+and the function's return value will then be stored under the same address.
 
+*Single-Level Data Writes*
 ```javascript
 export function Component() {
   let [state, patchState] = useStateMultiple();
@@ -91,25 +117,6 @@ export function Component() {
     },
     email: 'some.email@email.email'
   });
-}
-```
-
-#### Single Update
-
-For singular updates, the updating function also accepts a data address and its new value.
-Instead of a value, a transforming function can be provided that takes an existing value,
-operates on it, and returns a new value.
-
-```javascript
-export function Component() {
-  let [state, patchState] = useStateMultiple();
-  let {user: {loggedIn: false, email: ''} = {}, permissions = []} = state;
-
-  /*
-    ...
-  */
-
-  patchState('user.loggedIn', true);
 }
 ```
 

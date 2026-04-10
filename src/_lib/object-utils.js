@@ -19,24 +19,11 @@ export function getAddressesAndValues(address, value) {
     return [[address, value]];
   }
 
-  return getAddressesAndValuesFromObject(address);
-}
 
-function getAddressesAndValuesFromObject(writes, addressesAndValues = [], parentAddress = []) {
-  writes = Object.entries(writes);
-
-  for(let i = 0, {length} = writes; i < length; i++) {
-    let [address, value] = writes[i];
-    address = parentAddress.concat(address.split('.'));
-    
-    if(isObject(value)) {
-      getAddressesAndValuesFromObject(value, addressesAndValues, address);
-    } else {
-      addressesAndValues.push([address, value]);
-    }
-  }
-
-  return addressesAndValues;      
+  return Object.entries(address).map(([address, value]) => {
+    address = address.split('.');
+    return [address, value];
+  });
 }
 
 function isObject(value) {
