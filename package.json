@@ -1,6 +1,6 @@
 {
   "name": "use-state-multiple",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React state hook for multiple values",
   "main": "dist/use-state-multiple.js",
   "scripts": {
